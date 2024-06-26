@@ -25,7 +25,7 @@ jobs:
           npm install
           npm run build
           mkdir ${{ env.PLUGIN_NAME }}
-          cp README.md package.json icon.png LICENSE ${{ env.PLUGIN_NAME }}
+          cp README.md package.json icon.png example.png usage.png LICENSE ${{ env.PLUGIN_NAME }}
           mv dist ${{ env.PLUGIN_NAME }}
           zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
           ls
