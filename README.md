@@ -4,6 +4,8 @@ A plugin to export a Logseq page to pretty HTML file.
 
 ## Example
 
+A Logseq page on the left side will be exported to a HTML file on the right side.
+
 ![Example screenshot](./example.png)
 
 ## Usage
