@@ -29,8 +29,26 @@ async function parseBlock (block, level = 0) {
     return parsedBlocks;
 }
 
+async function base64EncodeImage (img) {
+    return new Promise((resolve, reject) => {
+        fetch(img.src)
+        .then(response => response.blob())
+        .then(blob => {
+            const reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onloadend = function() {
+                img.src = reader.result;
+                resolve();
+            }
+        });
+    });
+};
+
 async function exportPrettyHtml () {
     const currentPage = await logseq.Editor.getCurrentPage();
+    const currentGraph = await logseq.App.getCurrentGraph();
+    const graphPath = currentGraph.path;
+
     if (!currentPage) {
         logseq.UI.showMsg('Logseq-pretty-html-export: Please open a single page to export. (Maybe you are in journal view or graph view?)', 'warning', { timeout: 10000 });
         return;
@@ -105,6 +123,17 @@ async function exportPrettyHtml () {
         }
         parsedBlock.content = parsedBlock.content.replace(/<br \/>\nbackground-color:: (.*)/, '');
 
+        // images
+        const images = parsedBlock.content.match(/<img src="(.*)" alt="(.*)" \/>/g);
+        if (images) {
+            for (image of images) {
+                let imgpath = image.match(/<img src="(.*)" alt="(.*)" \/>/)[1];
+                let imgalt = image.match(/<img src="(.*)" alt="(.*)" \/>/)[2];
+                imgpath = imgpath.replace(/^../, 'file://' + graphPath);
+                parsedBlock.content = parsedBlock.content.replace(image, `<img src="${imgpath}" alt="${imgalt}">`);
+            }
+        }
+
         // hide metadata
         parsedBlock.content = parsedBlock.content.replace(/<br \/>\nid:: .*$/m, '');
         parsedBlock.content = parsedBlock.content.replace(/<br \/>\ncollapsed:: true$/m, '');
@@ -115,7 +144,18 @@ async function exportPrettyHtml () {
             pointer.innerHTML += `<li>${parsedBlock.content}</li>`;
         }
     };
+    // replace image to base64
+    const imgs = container.querySelectorAll('img');
+    if (logseq.settings.embedLocalImages) {
+        for (img of imgs) {
+            if (img.src.startsWith('file://')) {
+                await base64EncodeImage(img);
+            }
+        }
+    }
+
     const content = container.innerHTML;
+
     let html = logseq.settings.htmlTemplate;
     html = html.replace(/\${pageTitle}/g, pageTitle);
     html = html.replace(/\${content}/g, content);
@@ -197,6 +237,13 @@ body {
             type: 'boolean',
             default: true,
             title: 'Suppress Empty Lines',
+        },
+        {
+            key: 'embedLocalImages',
+            description: 'Embed local images as base64 in exported HTML.',
+            type: 'boolean',
+            default: true,
+            title: 'Embed Local Images',
         },
     ])
 }
