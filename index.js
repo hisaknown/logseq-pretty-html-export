@@ -35,6 +35,10 @@ async function exportPrettyHtml () {
         logseq.UI.showMsg('Logseq-pretty-html-export: Please open a single page to export. (Maybe you are in journal view or graph view?)', 'warning', { timeout: 10000 });
         return;
     }
+    if (!currentPage.originalName) {
+        logseq.UI.showMsg('Logseq-pretty-html-export: Please open a single page to export. (Maybe you are selecting a block?)', 'warning', { timeout: 10000 });
+        return;
+    }
     const pageTitle = currentPage.originalName;
     const pageBlocks = await logseq.Editor.getCurrentPageBlocksTree();
     let parsedBlocks = [];
