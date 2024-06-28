@@ -124,13 +124,21 @@ async function exportPrettyHtml () {
         parsedBlock.content = parsedBlock.content.replace(/<br \/>\nbackground-color:: (.*)/, '');
 
         // images
-        const images = parsedBlock.content.match(/<img src="(.*)" alt="(.*)" \/>/g);
+        const images = parsedBlock.content.match(/<img src="(.*)" alt="(.*)" \/>({:height [0-9]+, :width [0-9]+})?/g);
         if (images) {
             for (image of images) {
+                const height = image.match(/{:height ([0-9]+), :width [0-9]+}/)?.slice(1);
+                const width = image.match(/{:height [0-9]+, :width ([0-9]+)}/)?.slice(1);
+
                 let imgpath = image.match(/<img src="(.*)" alt="(.*)" \/>/)[1];
                 let imgalt = image.match(/<img src="(.*)" alt="(.*)" \/>/)[2];
                 imgpath = imgpath.replace(/^../, 'file://' + graphPath);
-                parsedBlock.content = parsedBlock.content.replace(image, `<img src="${imgpath}" alt="${imgalt}">`);
+                if (width) {  // NOTE: in Logseq app, only width works?
+                    parsedBlock.content = parsedBlock.content.replace(image, `<img src="${imgpath}" alt="${imgalt}" width="${width}">`);
+                    parsedBlock.content = parsedBlock.content.replace(/{:height [0-9]+, :width [0-9]+}/, '');
+                } else {
+                    parsedBlock.content = parsedBlock.content.replace(image, `<img src="${imgpath}" alt="${imgalt}">`);
+                }
             }
         }
 
