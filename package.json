@@ -1,6 +1,6 @@
 {
   "name": "logseq-pretty-html-export",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "hisaknown",
   "main": "dist/index.html",
   "description": "Export note as a pretty HTML file",
