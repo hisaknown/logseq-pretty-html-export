@@ -248,9 +248,9 @@ body {
         },
         {
             key: 'embedLocalImages',
-            description: 'Embed local images as base64 in exported HTML.',
+            description: 'Embed local images as base64 in exported HTML. Note: this requires installing the plugin via "Load unpacked plugin" with developer mode enabled.',
             type: 'boolean',
-            default: true,
+            default: false,
             title: 'Embed Local Images',
         },
     ])
