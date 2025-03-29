@@ -207,7 +207,7 @@ Use the following placeholders: <br>
             default: `<!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.6.1/github-markdown.min.css" integrity="sha512-heNHQxAqmr9b5CZSB7/7NSC96qtb9HCeOKomgLFv9VLkH+B3xLgUtP73i1rM8Gpmfaxb7262LFLJaH/hKXyxyA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown-light.css" integrity="sha512-CxC9MO8FBaaq8vl9yaXHjgWd7uXqx3pWMSBP3daioTTI0gpXijlypuMV67NoE1bPYMzj7ZSNNS0o+jFFdFodgA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
 body {
     box-sizing: border-box;
