@@ -10,6 +10,7 @@ async function parseBlock (block, level = 0) {
 
     let content = converter.makeHtml(block.content);
     content = content.replace(/^<p>(.*)<\/p>$/s, '$1');
+    content = content.replace(/==(.*?)==/g, '<mark>$1</mark>');
 
     const embed = content.match(/{{embed \(\((.*)\)\)}}/);
     if (embed) {
